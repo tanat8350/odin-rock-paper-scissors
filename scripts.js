@@ -50,7 +50,17 @@ function game() {
   playRound();
   playRound();
   playRound();
+
+  function findWinner() {
+    return playerScore > computerScore
+      ? "Winner is Player"
+      : computerScore > playerScore
+      ? "Winner is Computer"
+      : playerScore === computerScore && "Ties";
+  }
+
   console.log(`Final Score
+  ${findWinner()}
   Player: ${playerScore} Com: ${computerScore}`);
 }
 
