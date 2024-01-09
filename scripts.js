@@ -1,6 +1,31 @@
 function game() {
   let playerScore = 0;
   let computerScore = 0;
+  let playerSelection = "";
+
+  const playerSelectionParent = document.querySelector(
+    "#player-selection-parent"
+  );
+  const divPlayerSelect = document.querySelector(".js-player-select");
+
+  playerSelectionParent.addEventListener("click", (e) => {
+    const target = e.target;
+
+    if (target.classList.contains("js-player-rock")) {
+      playerSelection = "Rock";
+    } else if (target.classList.contains("js-player-paper")) {
+      playerSelection = "Paper";
+    } else if (target.classList.contains("js-player-scissors")) {
+      playerSelection = "Scissors";
+    }
+    divPlayerSelect.textContent = `Player selected ${playerSelection}`;
+    playRound();
+  });
+
+  function resetScore() {
+    playerScore = 0;
+    computerScore = 0;
+  }
 
   function getComputerChoice() {
     const choice = ["Rock", "Paper", "Scissors"];
@@ -15,53 +40,48 @@ function game() {
 
   function playRound() {
     const computerSelection = getComputerChoice();
-    const playerSelection = prompt("Select Rock, Paper or Scissors");
-    const playerCapitalized =
-      playerSelection.charAt(0).toUpperCase() +
-      playerSelection.slice(1).toLowerCase();
+    const paraScore = document.querySelector(".js-score");
+
+    // const playerCapitalized =
+    //   playerSelection.charAt(0).toUpperCase() +
+    //   playerSelection.slice(1).toLowerCase();
 
     if (
-      (playerCapitalized === "Rock" && computerSelection === "Scissors") ||
-      (playerCapitalized === "Scissors" && computerSelection === "Paper") ||
-      (playerCapitalized === "Paper" && computerSelection === "Rock")
+      (playerSelection === "Rock" && computerSelection === "Scissors") ||
+      (playerSelection === "Scissors" && computerSelection === "Paper") ||
+      (playerSelection === "Paper" && computerSelection === "Rock")
     ) {
       playerScore++;
-      console.log(`Player: ${playerScore} Com: ${computerScore}
-      You Win Player: ${playerCapitalized} Com: ${computerSelection}`);
-      return `You Win! ${playerCapitalized} beats ${computerSelection}`;
+      paraScore.textContent = `Player: ${playerScore} Com: ${computerScore}
+      You Win Player: ${playerSelection} Com: ${computerSelection}`;
     } else if (
-      (playerCapitalized === "Scissors" && computerSelection === "Rock") ||
-      (playerCapitalized === "Rock" && computerSelection === "Paper") ||
-      (playerCapitalized === "Paper" && computerSelection === "Scissors")
+      (playerSelection === "Scissors" && computerSelection === "Rock") ||
+      (playerSelection === "Rock" && computerSelection === "Paper") ||
+      (playerSelection === "Paper" && computerSelection === "Scissors")
     ) {
       computerScore++;
-      console.log(`Player: ${playerScore} Com: ${computerScore}
-      You Lose Player: ${playerCapitalized} Com: ${computerSelection}`);
-      return `You Lose! ${computerSelection} beats ${playerCapitalized}`;
-    } else if (playerCapitalized === computerSelection) {
-      console.log(`Player: ${playerScore} Com: ${computerScore}
-      TIES Player: ${playerCapitalized} Com: ${computerSelection}`);
-      return "TIES";
+      paraScore.textContent = `Player: ${playerScore} Com: ${computerScore}
+      You Lose Player: ${playerSelection} Com: ${computerSelection}`;
+    } else if (playerSelection === computerSelection) {
+      paraScore.textContent = `Player: ${playerScore} Com: ${computerScore}
+      TIES Player: ${playerSelection} Com: ${computerSelection}`;
     }
-    console.log(`Player: ${playerScore} Com: ${computerScore}`);
-  }
-  playRound();
-  playRound();
-  playRound();
-  playRound();
-  playRound();
 
-  function findWinner() {
-    return playerScore > computerScore
-      ? "Winner is Player"
-      : computerScore > playerScore
-      ? "Winner is Computer"
-      : playerScore === computerScore && "Ties";
-  }
+    function messageWinner(winner) {
+      paraScore.innerHTML = `Winner is "${winner}" <br>
+      (Player ${playerScore}:${computerScore} Computer) <br>
+      The Scores will be reset.`;
+      resetScore();
+    }
 
-  console.log(`Final Score
-  ${findWinner()}
-  Player: ${playerScore} Com: ${computerScore}`);
+    if (playerScore === 5) {
+      messageWinner("Player");
+      resetScore();
+    } else if (computerScore === 5) {
+      messageWinner("Computer");
+      resetScore();
+    }
+  }
 }
 
 game();
